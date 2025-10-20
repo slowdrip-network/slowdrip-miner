@@ -180,5 +180,4 @@ PRs welcome. Please keep changes modular (one module per PR when possible) and i
 
 ## 📄 License
 
-Apache-2.0 (or your preferred license).
-
+Apache-2.0
