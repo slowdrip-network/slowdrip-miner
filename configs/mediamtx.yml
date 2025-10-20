@@ -1,0 +1,46 @@
+######################## Global ########################
+logLevel: info
+logDestinations: [stdout]
+
+####################### Control API #####################
+api: yes
+apiAddress: ":9997"
+
+####################### Protocol listeners ##############
+rtmp: yes
+rtmpAddress: ":1935"
+
+rtsp: yes
+rtspAddress: ":8554"
+
+# --- WebRTC / WHIP & WHEP ---
+webrtc: yes
+webrtcAddress: ":8889"                     # ICE TCP mux (keep)
+# Use at least one STUN; add TURN for NATs/CGNAT
+webrtcICEServers:
+  - stun:stun.l.google.com:19302
+  # TURN (optional but recommended); long-term creds
+  # - turn:turnuser:turnpass@turn.example.com:3478?transport=udp
+# If behind NAT, set your public IP or hostname here
+webrtcICEHostNAT1To1IPs: [ "YOUR.PUBLIC.IP" ]   # or ["webrtc.example.com"]
+# Expose a UDP port range if you don’t use host networking
+webrtcICEUDPRange: [8000, 8200]
+
+# Low-latency HLS as fallback
+hls: yes
+hlsAddress: ":8888"
+hlsSegmentCount: 7
+hlsSegmentDuration: 2s
+hlsAlwaysRemux: yes
+
+######################## Authentication #################
+authMethod: jwt
+authJWTJWKS: https://.../jwks
+authJWTClaimKey: mediamtx_permissions
+
+########################## Paths ########################
+paths:
+  "~^.*$":
+    source: publisher
+  "room/composite":
+    source: publisher

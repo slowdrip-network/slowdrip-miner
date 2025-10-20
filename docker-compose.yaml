@@ -1,0 +1,34 @@
+services:
+  mediamtx:
+    image: bluenviron/mediamtx:latest
+    container_name: mediamtx
+    restart: unless-stopped
+    volumes:
+      - ./configs/mediamtx.yml:/mediamtx.yml:ro
+      - /etc/ssl/certs:/etc/ssl/certs:ro
+    ports:
+      - "1935:1935/tcp"          # RTMP
+      - "8554:8554/tcp"          # RTSP
+      - "8888:8888/tcp"          # HLS
+      - "8443:8443/tcp"          # WHIP/WHEP (HTTPS)
+      - "8889:8889/tcp"          # WebRTC TCP mux (optional)
+      - "8000-8200:8000-8200/udp" # WebRTC ICE UDP range
+      - "9997:9997/tcp"          # REST API
+    environment:
+      - SSL_CERT_DIR=/etc/ssl/certs
+      - SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+
+  miner:
+    build:
+      context: .
+      dockerfile: ./deploy/Dockerfile.miner
+    container_name: slowdrip-miner
+    network_mode: host
+    depends_on: [mediamtx]
+    restart: unless-stopped
+    environment:
+      - MINER_CONFIG=/app/configs/miner.yaml
+      - MEDIAMTX_API=http://127.0.0.1:9997
+      - LOG_LEVEL=info
+    volumes:
+      - ./configs/miner.yaml:/app/configs/miner.yaml:ro

@@ -1,0 +1,18 @@
+miner:
+  id: "miner-local-001"
+  listen: ":8080"
+  region: "us-west-1"
+
+mediamtx:
+  api: "${MEDIAMTX_API:http://127.0.0.1:9997}"
+  pollInterval: "2s"
+
+metrics:
+  enable: true
+  path: "/metrics"
+
+presence:
+  enable: true   # stub loop
+
+service:
+  enable: true   # stub loop
